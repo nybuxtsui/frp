@@ -282,6 +282,12 @@ func (svr *Service) login() (conn net.Conn, session *fmux.Session, err error) {
 			Hook: frpNet.DialHookCustomTLSHeadByte(tlsConfig != nil, svr.cfg.DisableCustomTLSFirstByte),
 		}),
 	)
+	if svr.cfg.ObscEnable {
+		xl.Info("obsckey=" + svr.cfg.ObscKey)
+		dialOptions = append(dialOptions,
+			frpNet.WithObscConfigs(svr.cfg.ObscKey)...,
+		)
+	}
 	conn, err = libdial.Dial(
 		net.JoinHostPort(svr.cfg.ServerAddr, strconv.Itoa(svr.cfg.ServerPort)),
 		dialOptions...,
@@ -301,6 +307,7 @@ func (svr *Service) login() (conn net.Conn, session *fmux.Session, err error) {
 
 	if svr.cfg.TCPMux {
 		fmuxCfg := fmux.DefaultConfig()
+		fmuxCfg.MaxStreamWindowSize = 10 * 1024 * 1024
 		fmuxCfg.KeepAliveInterval = time.Duration(svr.cfg.TCPMuxKeepaliveInterval) * time.Second
 		fmuxCfg.LogOutput = io.Discard
 		session, err = fmux.Client(conn, fmuxCfg)

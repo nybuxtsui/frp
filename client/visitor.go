@@ -309,6 +309,7 @@ func (sv *XTCPVisitor) handleConn(userConn net.Conn) {
 	}
 
 	fmuxCfg := fmux.DefaultConfig()
+	fmuxCfg.MaxStreamWindowSize = 10 * 1024 * 1024
 	fmuxCfg.KeepAliveInterval = 5 * time.Second
 	fmuxCfg.LogOutput = io.Discard
 	sess, err := fmux.Client(remote, fmuxCfg)

@@ -59,6 +59,7 @@ var (
 	allowPorts           string
 	maxPortsPerClient    int64
 	tlsOnly              bool
+	obscKey              string
 	dashboardTLSMode     bool
 	dashboardTLSCertFile string
 	dashboardTLSKeyFile  string
@@ -90,6 +91,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&subDomainHost, "subdomain_host", "", "", "subdomain host")
 	rootCmd.PersistentFlags().StringVarP(&allowPorts, "allow_ports", "", "", "allow ports")
 	rootCmd.PersistentFlags().Int64VarP(&maxPortsPerClient, "max_ports_per_client", "", 0, "max ports per client")
+	rootCmd.PersistentFlags().StringVarP(&obscKey, "obsc_key", "", "123456", "obsc key")
 	rootCmd.PersistentFlags().BoolVarP(&tlsOnly, "tls_only", "", false, "frps tls only")
 	rootCmd.PersistentFlags().BoolVarP(&dashboardTLSMode, "dashboard_tls_mode", "", false, "dashboard tls mode")
 	rootCmd.PersistentFlags().StringVarP(&dashboardTLSCertFile, "dashboard_tls_cert_file", "", "", "dashboard tls cert file")
@@ -178,6 +180,7 @@ func parseServerCommonCfgFromCmd() (cfg config.ServerCommonConf, err error) {
 	cfg.LogMaxDays = logMaxDays
 	cfg.SubDomainHost = subDomainHost
 	cfg.TLSOnly = tlsOnly
+	cfg.ObscKey = obscKey
 
 	// Only token authentication is supported in cmd mode
 	cfg.ServerConfig = auth.GetDefaultServerConf()

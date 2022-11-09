@@ -133,6 +133,7 @@ func Test_LoadServerCommonConf(t *testing.T) {
 				},
 				MaxPoolCount:            59,
 				MaxPortsPerClient:       9,
+				ObscKey:                 "123456",
 				TLSOnly:                 true,
 				TLSCertFile:             "server.crt",
 				TLSKeyFile:              "server.key",

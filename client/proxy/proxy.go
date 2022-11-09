@@ -401,6 +401,7 @@ func (pxy *XTCPProxy) InWorkConn(conn net.Conn, m *msg.StartWorkConn) {
 	}
 
 	fmuxCfg := fmux.DefaultConfig()
+	fmuxCfg.MaxStreamWindowSize = 10 * 1024 * 1024
 	fmuxCfg.KeepAliveInterval = 5 * time.Second
 	fmuxCfg.LogOutput = io.Discard
 	sess, err := fmux.Server(kcpConn, fmuxCfg)

@@ -118,6 +118,11 @@ type ClientCommonConf struct {
 	// Valid values are "tcp", "kcp" and "websocket". By default, this value
 	// is "tcp".
 	Protocol string `ini:"protocol" json:"protocol"`
+
+	// ObscEnable specifies whether or not Obsc should be used when communicating
+	// while TLSEnabled, obsc automatic disable
+	ObscEnable bool   `ini:"obsc_enable" json:"obsc_enable"`
+	ObscKey    string `ini:"obsc_key" json:"obsc_key"`
 	// TLSEnable specifies whether or not TLS should be used when communicating
 	// with the server. If "tls_cert_file" and "tls_key_file" are valid,
 	// client will load the supplied tls configuration.
@@ -186,6 +191,8 @@ func GetDefaultClientConf() ClientCommonConf {
 		LoginFailExit:           true,
 		Start:                   make([]string, 0),
 		Protocol:                "tcp",
+		ObscEnable:              false,
+		ObscKey:                 "123456",
 		TLSEnable:               false,
 		TLSCertFile:             "",
 		TLSKeyFile:              "",
@@ -225,6 +232,11 @@ func (cfg *ClientCommonConf) Validate() error {
 
 		if cfg.TLSTrustedCaFile != "" {
 			fmt.Println("WARNING! tls_trusted_ca_file is invalid when tls_enable is false")
+		}
+	} else {
+		if cfg.ObscEnable {
+			fmt.Println("WARNING! both tls and obsc enable, disable obsc")
+			cfg.ObscEnable = false
 		}
 	}
 

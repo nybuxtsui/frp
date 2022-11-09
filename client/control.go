@@ -256,6 +256,12 @@ func (ctl *Control) connectServer() (conn net.Conn, err error) {
 				Hook: frpNet.DialHookCustomTLSHeadByte(tlsConfig != nil, ctl.clientCfg.DisableCustomTLSFirstByte),
 			}),
 		)
+		if ctl.clientCfg.ObscEnable {
+			xl.Info("obsckey=" + ctl.clientCfg.ObscKey)
+			dialOptions = append(dialOptions,
+				frpNet.WithObscConfigs(ctl.clientCfg.ObscKey)...,
+			)
+		}
 		conn, err = libdial.Dial(
 			net.JoinHostPort(ctl.clientCfg.ServerAddr, strconv.Itoa(ctl.clientCfg.ServerPort)),
 			dialOptions...,

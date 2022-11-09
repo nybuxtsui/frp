@@ -155,7 +155,8 @@ type ServerCommonConf struct {
 	MaxPortsPerClient int64 `ini:"max_ports_per_client" json:"max_ports_per_client"`
 	// TLSOnly specifies whether to only accept TLS-encrypted connections.
 	// By default, the value is false.
-	TLSOnly bool `ini:"tls_only" json:"tls_only"`
+	ObscKey string `ini:"obsc_key" json:"obsc_key"`
+	TLSOnly bool   `ini:"tls_only" json:"tls_only"`
 	// TLSCertFile specifies the path of the cert file that the server will
 	// load. If "tls_cert_file", "tls_key_file" are valid, the server will use this
 	// supplied tls configuration. Otherwise, the server will use the tls
@@ -222,6 +223,7 @@ func GetDefaultServerConf() ServerCommonConf {
 		AllowPorts:              make(map[int]struct{}),
 		MaxPoolCount:            5,
 		MaxPortsPerClient:       0,
+		ObscKey:                 "123456",
 		TLSOnly:                 false,
 		TLSCertFile:             "",
 		TLSKeyFile:              "",

@@ -73,7 +73,9 @@ var (
 	bindAddr          string
 	bindPort          int
 
-	tlsEnable bool
+	tlsEnable  bool
+	obscEnable bool
+	obscKey    string
 )
 
 func init() {
@@ -92,6 +94,8 @@ func RegisterCommonFlags(cmd *cobra.Command) {
 	cmd.PersistentFlags().IntVarP(&logMaxDays, "log_max_days", "", 3, "log file reversed days")
 	cmd.PersistentFlags().BoolVarP(&disableLogColor, "disable_log_color", "", false, "disable log color in console")
 	cmd.PersistentFlags().BoolVarP(&tlsEnable, "tls_enable", "", false, "enable frpc tls")
+	cmd.PersistentFlags().BoolVarP(&obscEnable, "obsc_enable", "", false, "enable frpc obsc")
+	cmd.PersistentFlags().StringVarP(&obscKey, "obsc_key", "", "123456", "obsc key")
 }
 
 var rootCmd = &cobra.Command{
@@ -180,6 +184,8 @@ func parseClientCommonCfgFromCmd() (cfg config.ClientCommonConf, err error) {
 	cfg.ClientConfig = auth.GetDefaultClientConf()
 	cfg.Token = token
 	cfg.TLSEnable = tlsEnable
+	cfg.ObscEnable = obscEnable
+	cfg.ObscKey = obscKey
 
 	cfg.Complete()
 	if err = cfg.Validate(); err != nil {
